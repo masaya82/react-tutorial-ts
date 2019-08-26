@@ -8,7 +8,11 @@ interface SquareProps {
 }
 
 const Square = (props: SquareProps) => {
-  return <button className="square">{props.value}</button>;
+  return (
+    <button className="square" onClick={() => alert("click")}>
+      {props.value}
+    </button>
+  );
 };
 
 const Board = () => {
