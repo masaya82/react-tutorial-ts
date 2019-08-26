@@ -4,24 +4,32 @@ import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 
 interface SquareProps {
-  value: number;
+  value: string;
+  onClick: () => void;
 }
 
 const Square = (props: SquareProps) => {
-  const [value, setValue] = useState<null | string>(null);
-
   return (
-    <button className="square" onClick={() => setValue("X")}>
-      {value}
+    <button className="square" onClick={() => props.onClick()}>
+      {props.value}
     </button>
   );
 };
 
 const Board = () => {
-  const renderSquare = (i: number) => {
-    return <Square value={i} />;
+  let [squares, setSquares] = useState<string[]>(Array(9).fill(null));
+  let [xIsNext, setXIsNext] = useState<boolean>(true);
+  const handleClick = (i: number) => {
+    const squaresCurrent = squares.slice();
+    squaresCurrent[i] = xIsNext ? "X" : "O";
+    setSquares((squares = squaresCurrent));
+    setXIsNext(!xIsNext);
   };
-  const status = "Next player: X";
+  const renderSquare = (i: number) => {
+    return <Square value={squares[i]} onClick={() => handleClick(i)} />;
+  };
+
+  let status = "Next player: " + (xIsNext ? "X" : "O");
 
   return (
     <div>
