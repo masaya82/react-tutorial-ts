@@ -20,7 +20,10 @@ const Board = () => {
   let [squares, setSquares] = useState<string[]>(Array(9).fill(null));
   let [xIsNext, setXIsNext] = useState<boolean>(true);
   const handleClick = (i: number) => {
-    const squaresCurrent = squares.slice();
+    const squaresCurrent: string[] = squares.slice();
+    if (calculateWinner(squares) || squares[i]) {
+      return;
+    }
     squaresCurrent[i] = xIsNext ? "X" : "O";
     setSquares((squares = squaresCurrent));
     setXIsNext(!xIsNext);
@@ -28,8 +31,13 @@ const Board = () => {
   const renderSquare = (i: number) => {
     return <Square value={squares[i]} onClick={() => handleClick(i)} />;
   };
-
-  let status = "Next player: " + (xIsNext ? "X" : "O");
+  const winner: string | null = calculateWinner(squares);
+  let status: string | null = null;
+  if (winner) {
+    status = "Winner: " + winner;
+  } else {
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
 
   return (
     <div>
@@ -65,6 +73,26 @@ const Game = () => {
       </div>
     </div>
   );
+};
+
+const calculateWinner = (squares: string[]) => {
+  const lines: number[][] = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c]: number[] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return squares[a];
+    }
+  }
+  return null;
 };
 
 // ========================================
