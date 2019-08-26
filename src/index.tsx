@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import * as serviceWorker from "./serviceWorker";
@@ -8,9 +8,11 @@ interface SquareProps {
 }
 
 const Square = (props: SquareProps) => {
+  const [value, setValue] = useState<null | string>(null);
+
   return (
-    <button className="square" onClick={() => alert("click")}>
-      {props.value}
+    <button className="square" onClick={() => setValue("X")}>
+      {value}
     </button>
   );
 };
