@@ -4,12 +4,12 @@ import "./index.css";
 import * as serviceWorker from "./serviceWorker";
 
 interface SquareProps {
-  value: string;
+  value: "O" | "X" | null;
   onClick: () => void;
 }
 
 interface BoardProps {
-  squares: string[];
+  squares: ("O" | "X" | null)[];
   onClick: (i: number) => void;
 }
 
@@ -48,20 +48,20 @@ const Board = (props: BoardProps) => {
 };
 
 const Game = () => {
-  const [history, setHistory] = useState<{ squares: string[] }[]>([
+  const [history, setHistory] = useState<{ squares: ("O" | "X" | null)[] }[]>([
     { squares: Array(9).fill(null) }
   ]);
   const [stepNumber, setStepNumber] = useState<number>(0);
   const [xIsNext, setXIsNext] = useState<boolean>(true);
 
   const handleClick = (i: number) => {
-    const historyCurrent: { squares: string[] }[] = history.slice(
+    const historyCurrent: { squares: ("O" | "X" | null)[] }[] = history.slice(
       0,
       stepNumber + 1
     );
-    const current: { squares: string[] } =
+    const current: { squares: ("O" | "X" | null)[] } =
       historyCurrent[historyCurrent.length - 1];
-    const squaresCurrent: string[] = current.squares.slice();
+    const squaresCurrent: ("O" | "X" | null)[] = current.squares.slice();
     if (calculateWinner(squaresCurrent) || squaresCurrent[i]) {
       return;
     }
@@ -77,7 +77,8 @@ const Game = () => {
   };
 
   const historyUntilCurrent = history;
-  const current: { squares: string[] } = historyUntilCurrent[stepNumber];
+  const current: { squares: ("O" | "X" | null)[] } =
+    historyUntilCurrent[stepNumber];
   const winner: string | null = calculateWinner(current.squares);
 
   const moves = history.map((step, move) => {
@@ -112,7 +113,7 @@ const Game = () => {
   );
 };
 
-const calculateWinner = (squares: string[]) => {
+const calculateWinner = (squares: ("O" | "X" | null)[]) => {
   const lines: number[][] = [
     [0, 1, 2],
     [3, 4, 5],
